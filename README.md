@@ -1,2 +1,2 @@
-# BizPilot-AI
-AI-driven business automation platform with scalable microservices architecture, real-time processing, and intelligent workflow orchestration.
+# MarketFlow-frontend
+A modern backend service for real-time stock market applications featuring live market data streaming, historical data management, portfolio tracking, authentication, and scalable REST APIs.
