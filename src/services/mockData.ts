@@ -1,4 +1,4 @@
-import type { Stock, PortfolioItem, NewsItem, MarketIndex } from '../types';
+import type { Stock, PortfolioItem, NewsItem, MarketIndex, SectorData } from '../types';
 
 export const mockIndices: MarketIndex[] = [
   { 
@@ -118,4 +118,13 @@ export const mockNews: NewsItem[] = [
     summary: 'The central bank decided to keep benchmark interest rates steady, citing sticky inflation and a robust labor market.',
     relatedStocks: ['^GSPC', '^DJI'],
   },
+];
+
+export const mockSectors: SectorData[] = [
+  { name: 'Technology', value: 28.5, color: '#3b82f6' },
+  { name: 'Healthcare', value: 15.2, color: '#10b981' },
+  { name: 'Financials', value: 12.8, color: '#f59e0b' },
+  { name: 'Consumer Cyclical', value: 11.5, color: '#ef4444' },
+  { name: 'Industrials', value: 8.7, color: '#8b5cf6' },
+  { name: 'Others', value: 23.3, color: '#6b7280' },
 ];

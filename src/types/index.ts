@@ -46,4 +46,11 @@ export interface MarketIndex {
   price: number;
   change: number;
   changePercent: number;
+  chartData?: ChartDataPoint[];
+}
+
+export interface SectorData {
+  name: string;
+  value: number;
+  color: string;
 }

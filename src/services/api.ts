@@ -1,5 +1,5 @@
-import { mockStocks, mockIndices, mockNews, mockPortfolio } from './mockData';
-import type { Stock, MarketIndex, NewsItem, PortfolioItem } from '../types';
+import { mockStocks, mockIndices, mockNews, mockPortfolio, mockSectors } from './mockData';
+import type { Stock, MarketIndex, NewsItem, PortfolioItem, SectorData } from '../types';
 
 // Simulate API delay
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -17,6 +17,14 @@ export const api = {
     getTopLosers: async (): Promise<Stock[]> => {
       await delay(600);
       return [...mockStocks].sort((a, b) => a.changePercent - b.changePercent).slice(0, 5);
+    },
+    getMostActive: async (): Promise<Stock[]> => {
+      await delay(400);
+      return [...mockStocks].sort((a, b) => b.volume - a.volume).slice(0, 5);
+    },
+    getSectors: async (): Promise<SectorData[]> => {
+      await delay(400);
+      return mockSectors;
     },
     getStockBySymbol: async (symbol: string): Promise<Stock | undefined> => {
       await delay(400);

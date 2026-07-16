@@ -9,11 +9,11 @@
   --color-bg-light: #ffffff;
   --color-bg-light-secondary: #f8fafc;
   
-  --color-bg-dark: #090B10;
-  --color-bg-dark-secondary: #12161F;
+  --color-bg-dark: #0f172a; /* Slate 900 */
+  --color-bg-dark-secondary: #1e293b; /* Slate 800 */
   
   --color-border-light: #e2e8f0;
-  --color-border-dark: #222B3B;
+  --color-border-dark: #334155; /* Slate 700 */
   
   --color-text-light: #0f172a;
   --color-text-light-secondary: #475569;
