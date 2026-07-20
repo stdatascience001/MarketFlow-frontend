@@ -41,8 +41,48 @@ export const api = {
   },
   portfolio: {
     getPortfolio: async (): Promise<PortfolioItem[]> => {
-      await delay(700);
-      return mockPortfolio;
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/portfolio/`);
+      if (!res.ok) throw new Error('Failed to fetch portfolio');
+      return res.json();
+    },
+    addPosition: async (symbol: string, quantity: number, avg_price: number): Promise<any> => {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/portfolio/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ symbol, quantity, avg_price })
+      });
+      if (!res.ok) throw new Error('Failed to add position');
+      return res.json();
+    },
+    removePosition: async (symbol: string): Promise<any> => {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/portfolio/${symbol}`, {
+        method: 'DELETE'
+      });
+      if (!res.ok) throw new Error('Failed to remove position');
+      return res.json();
+    }
+  },
+  watchlist: {
+    getWatchlist: async (): Promise<any[]> => {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/watchlist/`);
+      if (!res.ok) throw new Error('Failed to fetch watchlist');
+      return res.json();
+    },
+    addWatchlistItem: async (symbol: string): Promise<any> => {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/watchlist/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ symbol })
+      });
+      if (!res.ok) throw new Error('Failed to add watchlist item');
+      return res.json();
+    },
+    removeWatchlistItem: async (symbol: string): Promise<any> => {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/watchlist/${symbol}`, {
+        method: 'DELETE'
+      });
+      if (!res.ok) throw new Error('Failed to remove watchlist item');
+      return res.json();
     }
   },
   news: {

@@ -2,6 +2,7 @@ import React from 'react';
 import type { Stock } from '../../types';
 import { Card } from '../ui/Card';
 import { ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface StockListProps {
   title: string;
@@ -27,7 +28,8 @@ export const StockList: React.FC<StockListProps> = ({ title, stocks, onViewAll }
             const colorClass = isPositive ? 'text-[var(--color-success)]' : 'text-[var(--color-danger)]';
             
             return (
-              <div 
+              <Link
+                to={`/stocks/${stock.symbol}`}
                 key={stock.symbol} 
                 className={`flex items-center justify-between p-3 hover:bg-[var(--bg-color)] transition-colors cursor-pointer ${
                   index !== stocks.length - 1 ? 'border-b border-[var(--border-color)]' : ''
@@ -52,7 +54,7 @@ export const StockList: React.FC<StockListProps> = ({ title, stocks, onViewAll }
                     {isPositive ? '+' : ''}{stock.change.toFixed(2)} ({isPositive ? '+' : ''}{stock.changePercent.toFixed(2)}%)
                   </span>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import { useThemeStore } from '../store/useThemeStore';
 import { Search, Bell, Settings, LayoutDashboard, LineChart, Star, Briefcase, Newspaper, User } from 'lucide-react';
 
@@ -23,22 +23,22 @@ export const MainLayout = () => {
           <h1 className="text-xl font-bold text-[var(--color-primary)]">Market Flow</h1>
         </div>
         <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-          <a href="#" className="flex items-center space-x-3 px-3 py-2.5 rounded-lg bg-[var(--color-primary)] text-white font-medium">
+          <NavLink to="/" end className={({ isActive }) => `flex items-center space-x-3 px-3 py-2.5 rounded-lg font-medium transition-colors ${isActive ? 'bg-[var(--color-primary)] text-white' : 'text-[var(--text-secondary)] hover:bg-[var(--border-color)]'}`}>
             <LayoutDashboard size={18} />
             <span>Dashboard</span>
-          </a>
+          </NavLink>
           <a href="#" className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[var(--text-secondary)] hover:bg-[var(--border-color)] transition-colors font-medium">
             <LineChart size={18} />
             <span>Market</span>
           </a>
-          <a href="#" className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[var(--text-secondary)] hover:bg-[var(--border-color)] transition-colors font-medium">
+          <NavLink to="/watchlist" className={({ isActive }) => `flex items-center space-x-3 px-3 py-2.5 rounded-lg font-medium transition-colors ${isActive ? 'bg-[var(--color-primary)] text-white' : 'text-[var(--text-secondary)] hover:bg-[var(--border-color)]'}`}>
             <Star size={18} />
             <span>Watchlist</span>
-          </a>
-          <a href="#" className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[var(--text-secondary)] hover:bg-[var(--border-color)] transition-colors font-medium">
+          </NavLink>
+          <NavLink to="/portfolio" className={({ isActive }) => `flex items-center space-x-3 px-3 py-2.5 rounded-lg font-medium transition-colors ${isActive ? 'bg-[var(--color-primary)] text-white' : 'text-[var(--text-secondary)] hover:bg-[var(--border-color)]'}`}>
             <Briefcase size={18} />
             <span>Portfolio</span>
-          </a>
+          </NavLink>
           <a href="#" className="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-[var(--text-secondary)] hover:bg-[var(--border-color)] transition-colors font-medium">
             <Newspaper size={18} />
             <span>News</span>

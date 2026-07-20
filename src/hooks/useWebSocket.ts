@@ -1,7 +1,12 @@
 import { useEffect } from "react";
 import { useMarketStore } from "../store/useMarketStore";
 
-const useWebSocket = (url: string = "ws://127.0.0.1:8000/api/ws") => {
+const getWebSocketUrl = () => {
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  return apiUrl.replace(/^http/, "ws") + "/api/ws";
+};
+
+const useWebSocket = (url: string = getWebSocketUrl()) => {
   const updateStockPrice = useMarketStore((state) => state.updateStockPrice);
 
   useEffect(() => {
