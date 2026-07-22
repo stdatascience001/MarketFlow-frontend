@@ -1,40 +1,47 @@
-import { mockStocks, mockIndices, mockNews, mockPortfolio, mockSectors } from './mockData';
+import { mockStocks, mockIndices, mockNews, mockPortfolio, mockSectors, mockCryptoIndices, mockCryptoStocks, mockCryptoNews, mockCryptoSectors } from './mockData';
 import type { Stock, MarketIndex, NewsItem, PortfolioItem, SectorData } from '../types';
+
+export type MarketType = 'stocks' | 'crypto';
 
 // Simulate API delay
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const api = {
   market: {
-    getIndices: async (): Promise<MarketIndex[]> => {
+    getIndices: async (marketType: MarketType = 'stocks'): Promise<MarketIndex[]> => {
       await delay(500);
-      return mockIndices;
+      return marketType === 'crypto' ? mockCryptoIndices : mockIndices;
     },
-    getTopGainers: async (): Promise<Stock[]> => {
+    getTopGainers: async (marketType: MarketType = 'stocks'): Promise<Stock[]> => {
       await delay(600);
-      return [...mockStocks].sort((a, b) => b.changePercent - a.changePercent).slice(0, 5);
+      const stocks = marketType === 'crypto' ? mockCryptoStocks : mockStocks;
+      return [...stocks].sort((a, b) => b.changePercent - a.changePercent).slice(0, 5);
     },
-    getTopLosers: async (): Promise<Stock[]> => {
+    getTopLosers: async (marketType: MarketType = 'stocks'): Promise<Stock[]> => {
       await delay(600);
-      return [...mockStocks].sort((a, b) => a.changePercent - b.changePercent).slice(0, 5);
+      const stocks = marketType === 'crypto' ? mockCryptoStocks : mockStocks;
+      return [...stocks].sort((a, b) => a.changePercent - b.changePercent).slice(0, 5);
     },
-    getMostActive: async (): Promise<Stock[]> => {
+    getMostActive: async (marketType: MarketType = 'stocks'): Promise<Stock[]> => {
       await delay(400);
-      return [...mockStocks].sort((a, b) => b.volume - a.volume).slice(0, 5);
+      const stocks = marketType === 'crypto' ? mockCryptoStocks : mockStocks;
+      return [...stocks].sort((a, b) => b.volume - a.volume).slice(0, 5);
     },
-    getSectors: async (): Promise<SectorData[]> => {
+    getSectors: async (marketType: MarketType = 'stocks'): Promise<SectorData[]> => {
       await delay(400);
-      return mockSectors;
+      return marketType === 'crypto' ? mockCryptoSectors : mockSectors;
     },
-    getStockBySymbol: async (symbol: string): Promise<Stock | undefined> => {
+    getStockBySymbol: async (symbol: string, marketType: MarketType = 'stocks'): Promise<Stock | undefined> => {
       await delay(400);
-      return mockStocks.find((s) => s.symbol.toUpperCase() === symbol.toUpperCase());
+      const stocks = marketType === 'crypto' ? mockCryptoStocks : mockStocks;
+      return stocks.find((s) => s.symbol.toUpperCase() === symbol.toUpperCase());
     },
-    searchStocks: async (query: string): Promise<Stock[]> => {
+    searchStocks: async (query: string, marketType: MarketType = 'stocks'): Promise<Stock[]> => {
       await delay(300);
       if (!query) return [];
       const lowerQuery = query.toLowerCase();
-      return mockStocks.filter(
+      const stocks = marketType === 'crypto' ? mockCryptoStocks : mockStocks;
+      return stocks.filter(
         (s) => s.symbol.toLowerCase().includes(lowerQuery) || s.name.toLowerCase().includes(lowerQuery)
       );
     }
@@ -86,9 +93,9 @@ export const api = {
     }
   },
   news: {
-    getLatestNews: async (): Promise<NewsItem[]> => {
+    getLatestNews: async (marketType: MarketType = 'stocks'): Promise<NewsItem[]> => {
       await delay(500);
-      return mockNews;
+      return marketType === 'crypto' ? mockCryptoNews : mockNews;
     }
   }
 };

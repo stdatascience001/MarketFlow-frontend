@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
+import { Search, Bell, Settings, LayoutDashboard, LineChart, Star, Briefcase, Newspaper, User, Bitcoin } from 'lucide-react';
+import { useMarketStore } from '../store/useMarketStore';
 import { useThemeStore } from '../store/useThemeStore';
-import { Search, Bell, Settings, LayoutDashboard, LineChart, Star, Briefcase, Newspaper, User } from 'lucide-react';
 
 export const MainLayout = () => {
   const { isDarkMode, toggleTheme } = useThemeStore();
+  const { marketType, setMarketType } = useMarketStore();
 
   useEffect(() => {
     if (isDarkMode) {
@@ -59,7 +61,7 @@ export const MainLayout = () => {
         
         {/* Topbar */}
         <header className="h-16 border-b border-[var(--border-color)] bg-[var(--bg-color)] flex items-center justify-between px-6 shrink-0">
-          <div className="flex items-center flex-1">
+          <div className="flex items-center flex-1 gap-4">
             <div className="relative w-full max-w-md">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search size={16} className="text-[var(--text-secondary)]" />
@@ -69,6 +71,19 @@ export const MainLayout = () => {
                 placeholder="Search stocks, e.g., AAPL"
                 className="w-full pl-10 pr-4 py-2 bg-[var(--bg-secondary)] border-none rounded-lg text-sm text-[var(--text-color)] placeholder-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
               />
+            </div>
+            <div className="relative">
+              <select
+                value={marketType}
+                onChange={(e) => setMarketType(e.target.value as 'stocks' | 'crypto')}
+                className="pl-8 pr-4 py-2 bg-[var(--bg-secondary)] border-none rounded-lg text-sm font-medium text-[var(--text-color)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] appearance-none cursor-pointer"
+              >
+                <option value="stocks">Stocks</option>
+                <option value="crypto">Crypto</option>
+              </select>
+              <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-[var(--color-primary)]">
+                {marketType === 'crypto' ? <Bitcoin size={16} className="text-[#f59e0b]" /> : <LineChart size={16} />}
+              </div>
             </div>
           </div>
           <div className="flex items-center space-x-4">

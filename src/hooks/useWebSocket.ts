@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useMarketStore } from "../store/useMarketStore";
 
 const getWebSocketUrl = () => {
@@ -7,11 +7,32 @@ const getWebSocketUrl = () => {
 };
 
 const useWebSocket = (url: string = getWebSocketUrl()) => {
-  const updateStockPrice = useMarketStore((state) => state.updateStockPrice);
+  const updateStockPrice  = useMarketStore((state) => state.updateStockPrice);
+  const marketStatus      = useMarketStore((state) => state.marketStatus);
+  const refreshMarketStatus = useMarketStore((state) => state.refreshMarketStatus);
+  const socketRef         = useRef<WebSocket | null>(null);
+
+  // Refresh market status every minute so the store stays current
+  useEffect(() => {
+    const timer = setInterval(refreshMarketStatus, 60_000);
+    return () => clearInterval(timer);
+  }, [refreshMarketStatus]);
 
   useEffect(() => {
+    // Do NOT connect to the live feed when the market is closed
+    if (!marketStatus.isOpen) {
+      // Close any existing socket when market closes
+      if (socketRef.current) {
+        socketRef.current.onclose = null;
+        socketRef.current.close();
+        socketRef.current = null;
+      }
+      return;
+    }
+
     const connect = () => {
       const socket = new WebSocket(url);
+      socketRef.current = socket;
 
       socket.onopen = () => {
         console.log("Connected to FastAPI WebSocket");
@@ -20,16 +41,15 @@ const useWebSocket = (url: string = getWebSocketUrl()) => {
       socket.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          // console.log("Real-time Market Data:", data);
-          
-          if (data.T === 'q' && data.S && data.bp) { // Quote
-             updateStockPrice(data.S, data.bp);
+
+          if (data.T === 'q' && data.S && data.bp) {      // Quote
+            updateStockPrice(data.S, data.bp);
           } else if (data.T === 't' && data.S && data.p) { // Trade
-             updateStockPrice(data.S, data.p);
+            updateStockPrice(data.S, data.p);
           } else if (data.T === 'b' && data.S && data.c) { // Bar
-             updateStockPrice(data.S, data.c);
-          } else if (data.symbol && data.price) { // Generic format fallback
-             updateStockPrice(data.symbol, data.price);
+            updateStockPrice(data.S, data.c);
+          } else if (data.symbol && data.price) {          // Generic fallback
+            updateStockPrice(data.symbol, data.price);
           }
         } catch (e) {
           console.error("Failed to parse websocket message", e);
@@ -49,13 +69,16 @@ const useWebSocket = (url: string = getWebSocketUrl()) => {
       return socket;
     };
 
-    const socket = connect();
+    connect();
 
     return () => {
-      socket.onclose = null; // Prevent reconnection on unmount
-      socket.close();
+      if (socketRef.current) {
+        socketRef.current.onclose = null; // Prevent reconnection on unmount
+        socketRef.current.close();
+        socketRef.current = null;
+      }
     };
-  }, [url, updateStockPrice]);
+  }, [url, marketStatus.isOpen, updateStockPrice]);
 };
 
 export default useWebSocket;

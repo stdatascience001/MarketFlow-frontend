@@ -44,6 +44,7 @@ export interface MarketIndex {
   symbol: string;
   name: string;
   price: number;
+  valueText?: string;
   change: number;
   changePercent: number;
   chartData?: ChartDataPoint[];
